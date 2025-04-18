@@ -1,34 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Recommender</title>
 </head>
 <body>
     <h1>Movie Recommender</h1>
 
-    <h2>Recommend by Genre</h2>
-    <form method="POST">
-        <select name="genre">
+    <!-- Dropdown for selecting genre -->
+    <form method="POST" action="/">
+        <label for="genre">Select Genre:</label>
+        <select name="genre" id="genre">
             {% for genre in genres %}
-                <option value="{{ genre }}" {% if genre == selected_genre %}selected{% endif %}>{{ genre }}</option>
+                <option value="{{ genre }}">{{ genre }}</option>
             {% endfor %}
         </select>
-        <input type="submit" value="Recommend by Genre">
+        <button type="submit">Get Movies by Genre</button>
     </form>
 
-    <h2>Recommend by User ID</h2>
-    <form method="POST">
-        <input type="text" name="user_id" placeholder="Enter User ID" value="{{ user_id }}">
-        <input type="submit" value="Recommend by User">
-    </form>
-
-    {% if recommendations %}
-        <h2>Recommended Movies:</h2>
+    <!-- Display movies based on selected genre -->
+    {% if genre_movies %}
+        <h2>Movies in the "{{ selected_genre }}" Genre</h2>
         <ul>
-            {% for movie in recommendations %}
-                <li>{{ movie[1] }} ({{ movie[2] }})</li> <!-- Assuming movie[1] = title, movie[2] = genre -->
-            {% endfor %}
+        {% for movie in genre_movies %}
+            <li>{{ movie[1] }} ({{ movie[2] }})</li> <!-- Title and Genre -->
+        {% endfor %}
         </ul>
     {% endif %}
+
+    <!-- Dropdown for selecting user ID for recommendations -->
+    <form method="POST" action="/">
+        <label for="user_id">Enter User ID:</label>
+        <input type="text" id="user_id" name="user_id" placeholder="Enter user ID">
+        <button type="submit">Get User-Based Recommendations</button>
+    </form>
+
+    <!-- Display user-based recommendations -->
+    {% if user_recommendations %}
+        <h2>Recommendations for User {{ user_id }}</h2>
+        <ul>
+        {% for movie in user_recommendations %}
+            <li>{{ movie[1] }} ({{ movie[2] }})</li> <!-- Title and Genre -->
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Rating form -->
+    <h2>Rate a Movie</h2>
+    <form method="POST" action="/rate">
+        <label for="user_id_rate">User ID:</label>
+        <input type="text" id="user_id_rate" name="user_id" placeholder="Enter user ID"><br>
+
+        <label for="movie_id">Movie:</label>
+        <select name="movie_id" id="movie_id">
+            {% for movie in movies %}
+                <option value="{{ movie[0] }}">{{ movie[1] }}</option> <!-- Movie ID and Title -->
+            {% endfor %}
+        </select><br>
+
+        <label for="rating">Rating (1 to 5):</label>
+        <input type="number" name="rating" id="rating" min="1" max="5"><br>
+
+        <button type="submit">Submit Rating</button>
+    </form>
+
+    <!-- Display the ratings that the user has given -->
+    <h2>Your Ratings:</h2>
+    {% if user_ratings %}
+        <ul>
+        {% for rating in user_ratings %}
+            <li>Movie ID: {{ rating[1] }} | Rating: {{ rating[2] }}</li> <!-- Movie ID and Rating -->
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No ratings found for this user.</p>
+    {% endif %}
+
 </body>
 </html>

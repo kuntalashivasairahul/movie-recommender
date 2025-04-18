@@ -27,5 +27,5 @@ def recommend_based_on_user(user_id):
     ''', (user_id,))
     row = cursor.fetchone()
     if row:
-        return get_movies_by_genre(list(row[0]))
+        return get_movies_by_genre(row[0])
     return []

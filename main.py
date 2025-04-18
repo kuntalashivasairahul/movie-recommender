@@ -1,4 +1,4 @@
-from db import initialize_db, load_movies_from_csv
+from database.db import initialize_db, load_movies_from_csv
 from recommender import get_movies_by_genre, recommend_based_on_user, get_all_genres
 import sqlite3
 from tabulate import tabulate

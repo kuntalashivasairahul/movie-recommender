@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Recommender</title>
+</head>
+<body>
+    <h1>Movie Recommender</h1>
+
+    <h2>Recommend by Genre</h2>
+    <form method="POST">
+        <select name="genre">
+            {% for genre in genres %}
+                <option value="{{ genre }}" {% if genre == selected_genre %}selected{% endif %}>{{ genre }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Recommend by Genre">
+    </form>
+
+    <h2>Recommend by User ID</h2>
+    <form method="POST">
+        <input type="text" name="user_id" placeholder="Enter User ID" value="{{ user_id }}">
+        <input type="submit" value="Recommend by User">
+    </form>
+
+    {% if recommendations %}
+        <h2>Recommended Movies:</h2>
+        <ul>
+            {% for movie in recommendations %}
+                <li>{{ movie[1] }} ({{ movie[2] }})</li> <!-- Assuming movie[1] = title, movie[2] = genre -->
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
